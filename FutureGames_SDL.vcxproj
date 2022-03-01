@@ -90,7 +90,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Block.cpp" />
+    <ClCompile Include="src\CustomTexture.cpp" />
+    <ClCompile Include="src\Engine.cpp" />
+    <ClCompile Include="src\Level.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Sprite.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Block.h" />
+    <ClInclude Include="src\CustomTexture.h" />
+    <ClInclude Include="src\Engine.h" />
+    <ClInclude Include="src\Level.h" />
+    <ClInclude Include="src\Sprite.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
