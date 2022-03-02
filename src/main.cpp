@@ -1,21 +1,23 @@
 //#include "Engine.h"
 #include <SDL/SDL.h>
-#include "CustomTexture.h"
 #include "Engine.h"
 #include "Sprite.h"
+#include "Block.h"
+#include "Player.h"
+#include "Level.h"
 
 int main()
 {
 	engine::init();
+	engine::loadTexture("tiles.bmp");
 
-	//SDL_Rect SpriteClips[4];
-	CustomTexture spriteSheetTexture{ "tiles.bmp" };
-	SDL_Rect src{ 0, 0, 16, 16 };
-	Sprite sprite{ &spriteSheetTexture, src };
+	SDL_Rect blockSrc{ 0, 0, 16, 6 };
+	int scale = 3;
+	int marginX = 10;
+	int marginY = 50;
 
-	float x = 100;
-	bool pressingA = false;
-	bool pressingD = false;
+	Level level{ 10, 10, blockSrc.w, blockSrc.h};
+	Player player{ {0, 12, blockSrc.w, blockSrc.h}, scale };
 
 	bool running = true;
 	Uint64 prevTicks = SDL_GetPerformanceCounter();
@@ -25,10 +27,10 @@ int main()
 		Uint64 ticks = SDL_GetPerformanceCounter();
 		Uint64 dTicks = ticks - prevTicks;
 		prevTicks = ticks;
-		float dt = (float) dTicks / SDL_GetPerformanceFrequency();
+		float deltaTime = (float) dTicks / SDL_GetPerformanceFrequency();
 
 		SDL_Event event;
-		if (SDL_PollEvent(&event))
+		while (SDL_PollEvent(&event))
 		{
 			switch (event.type)
 			{
@@ -43,48 +45,27 @@ int main()
 				{
 					running = false;
 				}
-
-				if (scancode == SDL_SCANCODE_A)
-				{
-					pressingA = true;
-				}
-				if (scancode == SDL_SCANCODE_D)
-				{
-					pressingD = true;
-				}
-
+				engine::registerInput((SDL_Scancode) scancode, true);
 				break;
 			}
-				case SDL_KEYUP:
-				{
-					int scancode = event.key.keysym.scancode;
-					if (scancode == SDL_SCANCODE_A)
-					{
-						pressingA = false;
-					}
-					if (scancode == SDL_SCANCODE_D)
-					{
-						pressingD = false;
-					}
-					break;
-				}
+			case SDL_KEYUP:
+			{
+				int scancode = event.key.keysym.scancode;
+				engine::registerInput((SDL_Scancode) scancode, false);
+				break;
+			}
 			}
 		}
 
-		//player movement
-		if (pressingD)
-		{
-			x += 128 * dt;
-		}
-		if (pressingA)
-		{
-			x -= 128 * dt;
-		}
-		
+		//update
+		player.update(deltaTime, marginX);
+
+		//render
 		engine::render();
-		
-		SDL_Rect dst{ 100, 100, 32, 32 };
-		sprite.render(dst);
+	
+		level.draw(scale, marginX, marginX + marginY);
+
+		player.draw({ 0, SCREEN_WIDTH - marginX + marginY, blockSrc.w * scale, blockSrc.h * scale});
 
 		engine::present();
 

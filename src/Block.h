@@ -1,13 +1,16 @@
 #pragma once
+#include "Sprite.h"
 
 class Block
 {
 public:
 	Block();
+	Block(SDL_Rect src);
 	~Block();
 
-	void render();
+	void draw(SDL_Rect dst);
 
 private:
-
+	Sprite sprite;
+	bool isActive;
 };

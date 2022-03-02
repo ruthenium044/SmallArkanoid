@@ -1,9 +1,8 @@
 #include "Sprite.h"
+#include "Engine.h"
 
-Sprite::Sprite(CustomTexture* texture, SDL_Rect src)
+Sprite::Sprite(SDL_Rect src) : src(src)
 {
-	this->texture = texture;
-	this->src = src;
 }
 
 Sprite::~Sprite()
@@ -13,5 +12,5 @@ Sprite::~Sprite()
 
 void Sprite::render(SDL_Rect dst)
 {
-	texture->render(src, dst);
+	engine::drawTexture(src, dst);
 }
