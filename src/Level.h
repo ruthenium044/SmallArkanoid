@@ -7,19 +7,16 @@ class Level
 {
 public:
 	Level();
-	Level(int gridX, int gridY, int blockX, int blockY);
+	Level(SDL_Rect src, int scale, int offsetX, int offsetY, int gridX, int gridY);
 	~Level();
 
-	void draw(int scale, int offsetX, int offsetY);
+	void draw();
+
+	int gridX = 0;
+	int gridY = 0;
+	std::vector<Block> blocks;
 
 private:
-	int gridX;
-	int gridY;
-
-	int blockX;
-	int blockY;
-
-	std::vector<Block> blocks;
 
 	std::vector<int> level = {
 		0, 1, 1, 1, 1, 1, 1, 1, 1, 0,

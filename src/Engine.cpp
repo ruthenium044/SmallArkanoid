@@ -40,7 +40,7 @@ namespace engine
         return false;
     }
 
-    bool collision(const Square& square, const Circle& circle)
+    bool collision(const SDL_Rect& square, const Circle& circle)
     {
         float testX = circle.x;
         float testY = circle.y;

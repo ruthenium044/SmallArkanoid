@@ -90,6 +90,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Ball.cpp" />
     <ClCompile Include="src\Block.cpp" />
     <ClCompile Include="src\Circle.cpp" />
     <ClCompile Include="src\Engine.cpp" />
@@ -100,6 +101,7 @@
     <ClCompile Include="src\Sprite.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Ball.h" />
     <ClInclude Include="src\Block.h" />
     <ClInclude Include="src\Shapes.h" />
     <ClInclude Include="src\Coords.h" />

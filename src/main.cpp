@@ -5,6 +5,7 @@
 #include "Block.h"
 #include "Player.h"
 #include "Level.h"
+#include "Ball.h"
 
 int main()
 {
@@ -15,9 +16,11 @@ int main()
 	int scale = 3;
 	int marginX = 10;
 	int marginY = 50;
+	float screenY = SCREEN_WIDTH - (float)marginX + (float)marginY;
 
-	Level level{ 10, 10, blockSrc.w, blockSrc.h};
-	Player player{ {0, 12, blockSrc.w, blockSrc.h}, scale };
+	Level level{ blockSrc, scale, marginX, marginY, 10, 10   };
+	Player player{ {0, 12, blockSrc.w, blockSrc.h}, scale, screenY };
+	Ball ball{ {0, 18, 4, 4}, scale, screenY - blockSrc.h * scale, 4 };
 
 	bool running = true;
 	Uint64 prevTicks = SDL_GetPerformanceCounter();
@@ -59,13 +62,24 @@ int main()
 
 		//update
 		player.update(deltaTime, marginX);
+		ball.update(deltaTime);
+
+		//collision
+		for (int i = 0; i < level.gridX * level.gridY; i++)
+		{
+			if (engine::collision(level.blocks[i].collider, { ball.x, ball.y, ball.r }))
+			{
+
+			}
+		}
+	
 
 		//render
 		engine::render();
 	
-		level.draw(scale, marginX, marginX + marginY);
-
-		player.draw({ 0, SCREEN_WIDTH - marginX + marginY, blockSrc.w * scale, blockSrc.h * scale});
+		level.draw();
+		player.draw();
+		ball.draw();
 
 		engine::present();
 

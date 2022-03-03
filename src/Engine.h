@@ -16,7 +16,7 @@ namespace engine
 	bool checkInput(SDL_Scancode key); 
 
 	bool collision(const Circle& circle1, const Circle& circle2);
-	bool collision(const Square& square1, const Circle& circle2);
+	bool collision(const SDL_Rect& square1, const Circle& circle2);
 
 	void render();
 	void drawTexture(SDL_Rect src, SDL_Rect dst);

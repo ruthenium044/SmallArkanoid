@@ -1,12 +1,12 @@
 #include "Level.h"
 
 Level::Level() 
-	: gridX(0), gridY(0), blockX(0), blockY(0)
+	
 {
 }
 
-Level::Level(int gridX, int gridY, int blockX, int blockY) 
-	: gridX(gridX), gridY(gridY), blockX(blockX), blockY(blockY)
+Level::Level(SDL_Rect src, int scale, int offsetX, int offsetY, int gridX, int gridY)
+	: gridX(gridX), gridY(gridY)
 {
 	for (int y = 0; y < gridX; y++)
 	{
@@ -14,12 +14,13 @@ Level::Level(int gridX, int gridY, int blockX, int blockY)
 		{
 			if (level[y * gridX + x] == 1)
 			{
-				Block temp{ {0, 0, blockX, blockY} };
+				Block temp{ src, scale, x * src.w * scale + offsetX, y * src.h * scale + offsetY };
 				blocks.push_back(temp);
 			}
 			else if(level[y * gridX + x] == 2)
 			{
-				Block temp{ {0, blockY, blockX, blockY} };
+				SDL_Rect tempSrc = { src.x, src.h, src.w, src.h };
+				Block temp{ tempSrc, scale, x * src.w * scale + offsetX, y * src.h * scale + offsetY };
 				blocks.push_back(temp);
 			}
 			else
@@ -35,15 +36,14 @@ Level::~Level()
 {
 }
 
-void Level::draw(int scale, int offsetX, int offsetY)
+void Level::draw()
 {
 	for (int y = 0; y < gridY; y++)
 	{
 		for (int x = 0; x < gridX; x++)
 		{
-			blocks[y * gridX + x].draw({ 
-				x * blockX * scale + offsetX, y * blockY * scale + offsetY, 
-				blockX * scale, blockY * scale });
+			blocks[y * gridX + x].draw();
 		}
 	}
 }
+

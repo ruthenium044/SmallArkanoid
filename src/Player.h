@@ -6,17 +6,18 @@ class Player
 {
 public:
 	Player();
-	Player(SDL_Rect src, int scale);
+	Player(SDL_Rect src, int scale, float y);
 	~Player();
 
-	void draw(SDL_Rect dst);
+	void draw();
 	void update(float dt, int offset);
 
 private:
-	Sprite sprite;
-	SDL_Rect src;
-	int scale;
+	Sprite sprite{ {0, 0, 0, 0} };
+	SDL_Rect src{0, 0, 0, 0};
+	int scale = 0;
 
-	float x;
-	int speed = 150;
+	float x = 0;
+	float y = 0;
+	int speed = 200;
 };

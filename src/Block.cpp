@@ -1,20 +1,28 @@
 #include "Block.h"
 
-Block::Block() : sprite( {0, 0, 0, 0} )
+Block::Block()
 {
-	isActive = false;
 }
 
-Block::Block(SDL_Rect src) : sprite(src)
+Block::Block(SDL_Rect src, int scale, int x, int y)
+	: sprite(src), isActive(true)
 {
-	isActive = true;
+	collider = { x, y, src.w * scale, src.h * scale };
 }
 
 Block::~Block()
 {
 }
 
-void Block::draw(SDL_Rect dst)
+void Block::draw()
 {
-	sprite.render(dst);
+	if (isActive)
+	{
+		sprite.render(collider);
+	}
+}
+
+void Block::collide()
+{
+	isActive = false;
 }
