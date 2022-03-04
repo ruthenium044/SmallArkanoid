@@ -12,12 +12,12 @@ public:
 	void collide();
 
 	SDL_Rect collider{ 0, 0, 0, 0 };
+	bool isActive = false;
 
 private:
 	int x = 0;
 	int y = 0;
 	int scale = 0;
 
-	Sprite sprite{ {0, 0, 0, 0} };;
-	bool isActive = false;
+	Sprite sprite{ {0, 0, 0, 0} };
 };

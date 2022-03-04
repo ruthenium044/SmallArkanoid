@@ -17,12 +17,20 @@ Player::~Player()
 
 void Player::draw()
 {
-	SDL_Rect dst = { x, y, src.w * scale, src.h * scale };
+	float tempX = x - src.w * scale / 2;
+	float tempY = y + src.h * scale / 2;
+	SDL_Rect dst = { tempX, tempY, src.w * scale, src.h * scale };
 	sprite.render(dst);
+}
+
+void Player::collide()
+{
 }
 
 void Player::update(float dt, int offset)
 {
+	collider = { (int) x, (int) y, src.w * scale, src.h * scale };
+
 	if (engine::checkInput(SDL_SCANCODE_A))
 	{
 		x -= speed * dt;

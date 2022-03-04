@@ -20,7 +20,7 @@ int main()
 
 	Level level{ blockSrc, scale, marginX, marginY, 10, 10   };
 	Player player{ {0, 12, blockSrc.w, blockSrc.h}, scale, screenY };
-	Ball ball{ {0, 18, 4, 4}, scale, screenY - blockSrc.h * scale, 4 };
+	Ball ball{ {0, 18, 4, 4}, scale, screenY - blockSrc.h * scale - 4, 4 };
 
 	bool running = true;
 	Uint64 prevTicks = SDL_GetPerformanceCounter();
@@ -60,20 +60,32 @@ int main()
 			}
 		}
 
+
+
 		//update
 		player.update(deltaTime, marginX);
 		ball.update(deltaTime);
 
 		//collision
-		for (int i = 0; i < level.gridX * level.gridY; i++)
+		for (auto& block : level.blocks)
 		{
-			if (engine::collision(level.blocks[i].collider, { ball.x, ball.y, ball.r }))
+			if (engine::collision(block.collider, ball.collider))
 			{
-
+				if (block.isActive)
+				{
+					block.collide();
+					ball.collide(deltaTime);
+				}
+				
 			}
 		}
-	
 
+		if (engine::collision(player.collider, ball.collider))
+		{
+			player.collide();
+			ball.collide(deltaTime);
+		}
+	
 		//render
 		engine::render();
 	
@@ -81,6 +93,18 @@ int main()
 		player.draw();
 		ball.draw();
 
+		engine::drawRect(player.collider);
+		engine::drawRect({  (int) ball.collider.x, 
+							(int) ball.collider.y,
+							(int) ball.collider.r,
+							(int) ball.collider.r });
+		for (auto& block : level.blocks)
+		{
+			if (block.isActive)
+			{
+				engine::drawRect(block.collider);
+			}
+		}
 		engine::present();
 
 		SDL_Delay(16);

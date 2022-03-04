@@ -42,28 +42,28 @@ namespace engine
 
     bool collision(const SDL_Rect& square, const Circle& circle)
     {
-        float testX = circle.x;
-        float testY = circle.y;
+        float x = circle.x;
+        float y = circle.y;
         if (circle.x < square.x) 
         {
-            testX = square.x;
+            x = square.x;
         }
         else if (circle.x > square.x + square.w)
         {
-            testX = square.x + square.w;
+            x = square.x + square.w;
         }
 
         if (circle.y < square.y) 
         {
-            testY = square.y;
+            y = square.y;
         }
         else if (circle.y > square.y + square.h)
         {
-            testY = square.y + square.h;
+            y = square.y + square.h;
         }
 
-        float distX = circle.x - testX;
-        float distY = circle.y - testY;
+        float distX = circle.x - x;
+        float distY = circle.y - y;
         float distance = sqrt((distX * distX) + (distY * distY));
 
         if (distance <= circle.r) 
@@ -76,6 +76,13 @@ namespace engine
     void render()
     {
         SDL_RenderClear(renderer);
+        SDL_SetRenderDrawColor(renderer, 40, 40, 40, 255);
+    }
+
+    void drawRect(SDL_Rect rect)
+    {
+        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+        SDL_RenderDrawRect(renderer, &rect);
         SDL_SetRenderDrawColor(renderer, 40, 40, 40, 255);
     }
 

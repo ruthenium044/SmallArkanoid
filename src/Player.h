@@ -10,7 +10,10 @@ public:
 	~Player();
 
 	void draw();
+	void collide();
 	void update(float dt, int offset);
+
+	SDL_Rect collider{ 0, 0, 0, 0 };
 
 private:
 	Sprite sprite{ {0, 0, 0, 0} };
