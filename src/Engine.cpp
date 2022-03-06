@@ -76,14 +76,14 @@ namespace engine
     void render()
     {
         SDL_RenderClear(renderer);
-        SDL_SetRenderDrawColor(renderer, 40, 40, 40, 255);
+        SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255);
     }
 
     void drawRect(SDL_Rect rect)
     {
         SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
         SDL_RenderDrawRect(renderer, &rect);
-        SDL_SetRenderDrawColor(renderer, 40, 40, 40, 255);
+        SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255);
     }
 
     void drawTexture(SDL_Rect src, SDL_Rect dst)

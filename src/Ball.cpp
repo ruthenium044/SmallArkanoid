@@ -1,15 +1,16 @@
 #include "Ball.h"
 #include "Engine.h"
+#include <iostream>
 
 Ball::Ball()
 {
 }
 
-Ball::Ball(SDL_Rect src, int scale, float y, int size)
-	: sprite(src), scale(scale), size(size), y(y), isActive(true)
+Ball::Ball(SDL_Rect src, int scale, float y)
+	: sprite(src), scale(scale), y(y), isActive(true)
 {
 	x = SCREEN_WIDTH / 2 - src.w * scale / 2;
-	r = size * scale / 2;
+	r = src.w * scale / 2;
 }
 
 Ball::~Ball()
@@ -22,7 +23,7 @@ void Ball::draw()
 	{
 		return;
 	}
-	SDL_Rect dst{ (int)x, (int)y, size * scale, size * scale };
+	SDL_Rect dst{ (int)x, (int)y, r * scale, r * scale };
 	sprite.render(dst);
 }
 
@@ -30,7 +31,7 @@ void Ball::collide(float dt)
 {
 	//turn around
 	// vector x y
-
+	std::cout << x << " " << y << std::endl;
 	
 	velY = -velY;// *0.8;
 	//collide 
@@ -46,12 +47,14 @@ void Ball::update(float dt)
 
 	//try collide
 
-	//if (!step(velX * dt, 0)) //iff it collides on x axis flip
-	//{
-	//	velX = -velX;// * 0.8;
-	//}
-	//if (!step(0, velY * dt)) //if it collider on y axis flip
-	//{
+	if (!step(velX * dt, 0)) //iff it collides on x axis flip
+	{
+		velX = -velX;// * 0.8;
+	}
+	if (!step(0, velY * dt)) //if it collider on y axis flip
+	{
+		velY = -velY;
+	}
 
 	//move
 	x += velX * dt;

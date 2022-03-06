@@ -16,10 +16,10 @@ Block::~Block()
 
 void Block::draw()
 {
-	//if (!isActive)
-	//{
-	//	return;
-	//}
+	if (!isActive)
+	{
+		return;
+	}
 	sprite.render(collider);
 }
 

@@ -6,7 +6,7 @@ class Ball
 {
 public:
 	Ball();
-	Ball(SDL_Rect src, int scale, float y, int size);
+	Ball(SDL_Rect src, int scale, float y);
 	~Ball();
 
 	void draw();
@@ -28,7 +28,6 @@ private:
 	bool isActive = false;
 	Sprite sprite{ {0, 0, 0, 0} };
 
-	int size = 0;
 	int scale = 0;
 	int speed = 100;
 

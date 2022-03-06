@@ -10,17 +10,17 @@
 int main()
 {
 	engine::init();
-	engine::loadTexture("tiles.bmp");
+	engine::loadTexture("Warship.png");
 
-	SDL_Rect blockSrc{ 0, 0, 16, 6 };
+	SDL_Rect blockSrc{ 0, 0, 16, 8 };
 	int scale = 3;
 	int marginX = 10;
 	int marginY = 50;
 	float screenY = SCREEN_WIDTH - (float)marginX + (float)marginY;
 
-	Level level{ blockSrc, scale, marginX, marginY, 10, 10   };
-	Player player{ {0, 12, blockSrc.w, blockSrc.h}, scale, screenY };
-	Ball ball{ {0, 18, 4, 4}, scale, screenY - blockSrc.h * scale - 4, 4 };
+	Level level{ blockSrc, scale, marginX, marginY, 10, 10 };
+	Player player{ {0, 24, blockSrc.w, blockSrc.h/2}, scale, screenY };
+	Ball ball{ {0, 32, 5, 5}, scale, screenY - blockSrc.h * scale - 8};
 
 	bool running = true;
 	Uint64 prevTicks = SDL_GetPerformanceCounter();
@@ -59,8 +59,6 @@ int main()
 			}
 			}
 		}
-
-
 
 		//update
 		player.update(deltaTime, marginX);
