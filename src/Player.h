@@ -6,19 +6,20 @@ class Player
 {
 public:
 	Player();
-	Player(SDL_Rect src, int scale, float y);
+	Player(SDL_Rect src, float scale, float y);
 	~Player();
 
 	void draw();
 	void collide();
-	void update(float dt, int offset);
+	void update(float dt, float offset);
 
-	SDL_Rect collider{ 0, 0, 0, 0 };
+	SDL_FRect colliderL{ 0, 0, 0, 0 };
+	SDL_FRect colliderR{ 0, 0, 0, 0 };
 
 private:
 	Sprite sprite{ {0, 0, 0, 0} };
 	SDL_Rect src{0, 0, 0, 0};
-	int scale = 0;
+	float scale = 0;
 
 	float x = 0;
 	float y = 0;

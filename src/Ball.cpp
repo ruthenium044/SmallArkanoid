@@ -1,16 +1,20 @@
 #include "Ball.h"
 #include "Engine.h"
-#include <iostream>
+#include "Block.h"
 
 Ball::Ball()
 {
 }
 
-Ball::Ball(SDL_Rect src, int scale, float y)
+Ball::Ball(SDL_Rect src, float scale, float y)
 	: sprite(src), scale(scale), y(y), isActive(true)
 {
-	x = SCREEN_WIDTH / 2 - src.w * scale / 2;
-	r = src.w * scale / 2;
+	x = SCREEN_WIDTH / 2.0f - (float) src.w * scale / 2.0f;
+	startX = x;
+	startY = y;
+	velX = startVelX;
+	velY = startVelY;
+	r = (float) src.w * scale / 2.0f;
 }
 
 Ball::~Ball()
@@ -23,22 +27,24 @@ void Ball::draw()
 	{
 		return;
 	}
-	SDL_Rect dst{ (int)x, (int)y, r * scale, r * scale };
+	SDL_FRect dst{ x, y, r * scale / 2.0f, r * scale / 2.0f };
 	sprite.render(dst);
 }
 
-void Ball::collide(float dt)
+void Ball::collide(float dt, bool isLeft)
 {
-	//turn around
-	// vector x y
-	std::cout << x << " " << y << std::endl;
-	
-	velY = -velY;// *0.8;
-	//collide 
-	
+	velY = -velY;
+	if (isLeft)
+	{
+		velX = -startVelX;
+	}
+	else
+	{
+		velX = startVelX;
+	}
 }
 
-void Ball::update(float dt)
+void Ball::update(float dt, std::vector<Block>& blocks)
 {
 	if (!isActive)
 	{
@@ -46,55 +52,57 @@ void Ball::update(float dt)
 	}
 
 	//try collide
+	float dx = velX * dt;
+	float dy = velY * dt;
 
-	if (!step(velX * dt, 0)) //iff it collides on x axis flip
+	if (!step(dx, 0.0f, blocks)) //if it collides on x axis flip
 	{
-		velX = -velX;// * 0.8;
+		velX = -velX;
 	}
-	if (!step(0, velY * dt)) //if it collider on y axis flip
+	if (!step(0.0f, dy, blocks)) //if it collider on y axis flip
 	{
 		velY = -velY;
 	}
-
-	//move
-	x += velX * dt;
-	y += velY * dt;
-	collider = { x, y, r * scale };
+	x += dx;
+	y += dy;
+	collider = { x, y, r * scale / 2.0f };
 }
 
-bool Ball::step(float dx, float dy)
+void Ball::reset()
 {
-	//create the next position
+	//SDL_Delay(600);
+	x = startX;
+	y = startY;
+	velX = startVelX;
+	velY = -startVelY;
+	isActive = true;
+}
 
-	//run the collision check
-	//if interesct just return false
-
-	//check if its bounds or not and shit
-
-	//if nothing was hit, move and return
-	// 
-	//Circle circle = { x + dx, y + dy, 4 };
-	//draw_circle(circle);
-
-	//for (int i = 0; i < BRICK_MAX; ++i)
-	//{
-	//	Brick& brick = bricks[i];
-	//	if (!brick.alive)
-	//		continue;
-
-	//	AABB box = AABB::make_from_position_size(brick.x, brick.y, brick.w, brick.h);
-
-	//	if (aabb_circle_intersect(box, circle))
-	//		return false;
-	//}
-
-	//// Check collisions with game borders
-	if (x + dx < 0 || x + dx >= SCREEN_WIDTH || y + dy < 0 || y + dy >= SCREEN_HEIGHT)
+bool Ball::step(float dx, float dy, std::vector<Block>& blocks)
+{
+	Circle nextCollider{ collider.x + dx, collider.y + dy, collider.r };
+	
+	for (auto& block : blocks)
+	{
+		if (!block.isActive)
+		{
+			continue;
+		}
+		if (engine::collision(block.collider, nextCollider))
+		{
+			block.collide();
+			return false;
+		}
+	}
+	if (x + dx < 0.0f || x + dx >= SCREEN_WIDTH || y + dy < 0.0f)
 	{
 		return false;
 	}
-
-	x += dx;
-	y += dy;
+	else if (y + dy >= SCREEN_HEIGHT)
+	{
+		isActive = false;
+		reset();
+		return false;
+	}
 	return true;
 }

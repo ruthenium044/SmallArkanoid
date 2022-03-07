@@ -10,7 +10,7 @@ Sprite::~Sprite()
 
 }
 
-void Sprite::render(SDL_Rect dst)
+void Sprite::render(SDL_FRect dst)
 {
 	engine::drawTexture(src, dst);
 }

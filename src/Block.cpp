@@ -4,8 +4,8 @@ Block::Block()
 {
 }
 
-Block::Block(SDL_Rect src, int scale, int x, int y)
-	: sprite(src), isActive(true)
+Block::Block(SDL_Rect src, float scale, float x, float y, int hp)
+	: sprite(src), hp(hp), isActive(true)
 {
 	collider = { x, y, src.w * scale, src.h * scale };
 }
@@ -25,5 +25,9 @@ void Block::draw()
 
 void Block::collide()
 {
-	isActive = false;
+	hp--;
+	if (hp < 0)
+	{
+		isActive = false;
+	}
 }

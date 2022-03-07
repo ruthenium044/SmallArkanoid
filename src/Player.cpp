@@ -5,7 +5,7 @@ Player::Player()
 {
 }
 
-Player::Player(SDL_Rect src, int scale, float y)
+Player::Player(SDL_Rect src, float scale, float y)
 	: sprite(src), src(src), scale(scale), y(y)
 {
 	x = SCREEN_WIDTH / 2 - src.w * scale / 2;
@@ -19,7 +19,7 @@ void Player::draw()
 {
 	float tempX = x - src.w * scale / 2;
 	float tempY = y + src.h * scale / 2;
-	SDL_Rect dst = { tempX, tempY, src.w * scale, src.h * scale };
+	SDL_FRect dst = { tempX, tempY, src.w * scale, src.h * scale };
 	sprite.render(dst);
 }
 
@@ -27,9 +27,11 @@ void Player::collide()
 {
 }
 
-void Player::update(float dt, int offset)
+void Player::update(float dt, float offset)
 {
-	collider = { (int) x, (int) y, src.w * scale, src.h * scale };
+	float w = src.w * scale;
+	float h = src.h * scale;
+	
 
 	if (engine::checkInput(SDL_SCANCODE_A))
 	{
@@ -41,4 +43,7 @@ void Player::update(float dt, int offset)
 		x += speed * dt;
 		x = SDL_clamp(x, offset, SCREEN_WIDTH - src.w * scale - offset);
 	}
+
+	colliderL = { x - w / 2, y + h / 2, w / 2, h };
+	colliderR = { w / 2 + x - w / 2, y + h / 2, w / 2, h };
 }

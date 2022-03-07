@@ -15,7 +15,6 @@ namespace engine
         SDL_Init(SDL_INIT_EVERYTHING);
         window = SDL_CreateWindow("Russky voyenny korabl, idi nahuy", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
         renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-        SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
     }
 
     void registerInput(SDL_Scancode key, bool state)
@@ -40,7 +39,7 @@ namespace engine
         return false;
     }
 
-    bool collision(const SDL_Rect& square, const Circle& circle)
+    bool collision(const SDL_FRect& square, const Circle& circle)
     {
         float x = circle.x;
         float y = circle.y;
@@ -79,16 +78,16 @@ namespace engine
         SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255);
     }
 
-    void drawRect(SDL_Rect rect)
+    void drawRect(SDL_FRect rect)
     {
         SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-        SDL_RenderDrawRect(renderer, &rect);
+        SDL_RenderDrawRectF(renderer, &rect);
         SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255);
     }
 
-    void drawTexture(SDL_Rect src, SDL_Rect dst)
+    void drawTexture(SDL_Rect src, SDL_FRect dst)
     {
-        SDL_RenderCopy(renderer, mainTexture, &src, &dst);
+        SDL_RenderCopyF(renderer, mainTexture, &src, &dst);
     }
 
     void loadTexture(const char* path)
