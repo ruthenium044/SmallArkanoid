@@ -1,6 +1,7 @@
 #pragma once
 #include "Sprite.h"
 #include "Engine.h"
+#include "Shapes.h"
 
 class Player
 {
@@ -13,15 +14,16 @@ public:
 	void collide();
 	void update(float dt, float offset);
 
-	SDL_FRect colliderL{ 0, 0, 0, 0 };
-	SDL_FRect colliderR{ 0, 0, 0, 0 };
+	Line colliderL{ 0, 0, 0, 0 };
+	Line colliderR{ 0, 0, 0, 0 };
 
+	float mid = 0;
 private:
 	Sprite sprite{ {0, 0, 0, 0} };
-	SDL_Rect src{0, 0, 0, 0};
+	SDL_Rect src{ 0, 0, 0, 0 };
 	float scale = 0;
 
 	float x = 0;
 	float y = 0;
-	int speed = 200;
+	int speed = 400;
 };

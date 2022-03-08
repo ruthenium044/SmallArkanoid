@@ -25,9 +25,9 @@ void Block::draw()
 
 void Block::collide()
 {
-	hp--;
-	if (hp < 0)
+	if (hp <= 0)
 	{
 		isActive = false;
 	}
+	hp--;
 }

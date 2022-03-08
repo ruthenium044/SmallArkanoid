@@ -12,7 +12,6 @@ int main()
 {
 	engine::init();
 	engine::loadTexture("Warship.png");
-	//SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 
 	SDL_Rect blockSrc{ 0, 0, 16, 8 };
 	float scale = 4;
@@ -22,7 +21,7 @@ int main()
 
 	Level level{ blockSrc, scale, marginX, marginY };
 	Player player{ {0, 24, blockSrc.w, blockSrc.h / 2}, scale, screenY };
-	Ball ball{ {0, 32, 5, 5}, scale, screenY - blockSrc.h * scale - 8 };
+	Ball ball{ {0, 32, 5, 5}, scale, screenY - blockSrc.h / 2 * scale + 2 };
 
 	bool running = true;
 	Uint64 prevTicks = SDL_GetPerformanceCounter();
@@ -64,7 +63,7 @@ int main()
 
 		//update
 		player.update(deltaTime, marginX);
-		ball.update(deltaTime, level.blocks);
+		ball.update(deltaTime, level.blocks, player.mid, marginX);
 
 		//collision
 		/*for (auto& block : level.blocks)
@@ -82,12 +81,12 @@ int main()
 
 		if (engine::collision(player.colliderL, ball.collider))
 		{
-			ball.collide(deltaTime, true);
+			ball.collide(deltaTime, true, player.colliderL);
 			player.collide();
 		}
 		else if (engine::collision(player.colliderR, ball.collider))
 		{
-			ball.collide(deltaTime, false);
+			ball.collide(deltaTime, false, player.colliderR);
 			player.collide();
 		}
 	
@@ -99,9 +98,10 @@ int main()
 		ball.draw();
 
 		//colliders
-		engine::drawRect(player.colliderL);
-		engine::drawRect(player.colliderR);
-		engine::drawRect({ ball.collider.x, ball.collider.y, ball.collider.r, ball.collider.r });
+		engine::drawLine(player.colliderL);
+		engine::drawLine(player.colliderR);
+
+		engine::drawCircle(ball.collider);
 		for (auto& block : level.blocks)
 		{
 			if (block.isActive)

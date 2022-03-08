@@ -72,6 +72,66 @@ namespace engine
         return false;
     }
 
+    bool collision(const Line& line, const Circle& circle)
+    {
+        if (collision(line.a, circle) || collision(line.b, circle))
+        {
+            return true;
+        }
+
+        float distX = line.a.x - line.b.x;
+        float distY = line.a.y - line.b.y;
+        float length = sqrt((distX * distX) + (distY * distY));
+
+        float dot = (((circle.x - line.a.x) * (line.b.x - line.a.x)) + 
+                    ((circle.y - line.a.y) * (line.b.y - line.a.y))) / pow(length, 2);
+
+        float closestX = line.a.x + (dot * (line.b.x - line.a.x));
+        float closestY = line.a.y + (dot * (line.b.y - line.a.y));
+
+        Point point{ closestX, closestY };
+        bool onSegment = collision(line, point);
+        if (!onSegment)
+        {
+            return false;
+        }
+
+        distX = closestX - circle.x;
+        distY = closestY - circle.y;
+      
+        float distance = sqrt((distX * distX) + (distY * distY));
+
+        if (distance <= circle.r) 
+        {
+            return true;
+        }
+        return false;
+    }
+
+    bool collision(const Point& point, const Circle& circle) 
+    {
+        float distX = point.x - circle.x;
+        float distY = point.y - circle.y;
+        float distance = sqrt((distX * distX) + (distY * distY));
+        if (distance <= circle.r) {
+            return true;
+        }
+        return false;
+    }
+
+    bool collision(const Line& line, const Point& point)
+    {
+        float dist1 = sqrt(pow(point.x - line.a.x, 2) + pow(point.y - line.a.y, 2));
+        float dist2 = sqrt(pow(point.x - line.b.x, 2) + pow(point.y - line.b.y, 2));
+        float lineLength = sqrt(pow(line.a.x - line.b.x, 2) + pow(line.a.y - line.b.y, 2));
+
+        if (dist1 + dist2 >= lineLength && dist1 + dist2 <= lineLength) 
+        {
+            return true;
+        }
+        return false;
+    }
+
     void render()
     {
         SDL_RenderClear(renderer);
@@ -82,6 +142,39 @@ namespace engine
     {
         SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
         SDL_RenderDrawRectF(renderer, &rect);
+        SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255);
+    }
+
+    void drawLine(Line line)
+    {
+        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+        SDL_RenderDrawLineF(renderer, line.a.x, line.a.y, line.b.x, line.b.y);
+        SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255);
+    }
+
+    void drawCircle(Circle circle)
+    {
+        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+        int resolution = 48;
+        float step = (2 * 3.14f) / resolution;
+
+        for (int i = 0; i < resolution; ++i)
+        {
+            float angle = step * i;
+            float x1 = cos(angle);
+            float y1 = sin(angle);
+
+            float next_angle = step * (i + 1);
+            float x2 = cos(next_angle);
+            float y2 = sin(next_angle);
+
+            SDL_RenderDrawLine(renderer,
+                x1 * circle.r + circle.x,
+                y1 * circle.r + circle.y,
+                x2 * circle.r + circle.x,
+                y2 * circle.r + circle.y
+            );
+        }
         SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255);
     }
 

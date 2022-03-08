@@ -1,6 +1,7 @@
 #include "Ball.h"
 #include "Engine.h"
 #include "Block.h"
+#include <iostream>
 
 Ball::Ball()
 {
@@ -9,12 +10,12 @@ Ball::Ball()
 Ball::Ball(SDL_Rect src, float scale, float y)
 	: sprite(src), scale(scale), y(y), isActive(true)
 {
-	x = SCREEN_WIDTH / 2.0f - (float) src.w * scale / 2.0f;
+	x = SCREEN_WIDTH / 2.0f;
 	startX = x;
 	startY = y;
 	velX = startVelX;
 	velY = startVelY;
-	r = (float) src.w * scale / 2.0f;
+	r = (float) src.w * scale / 4.0f;
 }
 
 Ball::~Ball()
@@ -27,55 +28,95 @@ void Ball::draw()
 	{
 		return;
 	}
-	SDL_FRect dst{ x, y, r * scale / 2.0f, r * scale / 2.0f };
+	SDL_FRect dst{ x - r * 2, y - r * 2, r * scale, r * scale };
 	sprite.render(dst);
 }
 
-void Ball::collide(float dt, bool isLeft)
+void Ball::collide(float dt, bool isLeft, Line collider)
 {
-	velY = -velY;
-	if (isLeft)
-	{
-		velX = -startVelX;
-	}
-	else
-	{
-		velX = startVelX;
-	}
-}
-
-void Ball::update(float dt, std::vector<Block>& blocks)
-{
-	if (!isActive)
+	if (!isActive || isDocked)
 	{
 		return;
 	}
 
-	//try collide
+	velY = -velY;
+	
+	float playerX = collider.a.x;
+	float length = collider.b.x;
+	float hitPoint = x;
+	float proportion = (x - collider.a.x) * 10;
+	std::cout << proportion << std::endl;
+
+	if (isLeft)
+	{
+		velX = -proportion;
+	}
+	else
+	{
+		velX = proportion;
+	}
+	y = startY;
+}
+
+void Ball::update(float dt, std::vector<Block>& blocks, int playerX, float offset)
+{
+	if (engine::checkInput(SDL_SCANCODE_SPACE))
+	{
+		isDocked = false;
+	}
+
+	if (isDocked)
+	{
+		x = playerX;
+	}
+
+	if (!isActive || isDocked)
+	{
+		return;
+	}
+
 	float dx = velX * dt;
 	float dy = velY * dt;
 
-	if (!step(dx, 0.0f, blocks)) //if it collides on x axis flip
-	{
-		velX = -velX;
-	}
-	if (!step(0.0f, dy, blocks)) //if it collider on y axis flip
-	{
-		velY = -velY;
-	}
+	checkLose(dy);
+	checkCollisions(dx, blocks, offset, dy);
+
 	x += dx;
 	y += dy;
 	collider = { x, y, r * scale / 2.0f };
 }
 
+void Ball::checkCollisions(float dx, std::vector<Block>& blocks, float offset, float dy)
+{
+	if (!step(dx, 0.0f, blocks) ||
+		x + dx < r + offset || x + dx >= SCREEN_WIDTH - r - offset)
+	{
+		velX = -velX;
+	}
+	if (!step(0.0f, dy, blocks) || y + dy < r + offset)
+	{
+		velY = -velY;
+	}
+}
+
+void Ball::checkLose(float dy)
+{
+	if (y + dy >= SCREEN_HEIGHT + 2 * r)
+	{
+		isActive = false;
+		reset();
+	}
+}
+
 void Ball::reset()
 {
-	//SDL_Delay(600);
+	//todo maybe add timer
 	x = startX;
 	y = startY;
 	velX = startVelX;
 	velY = -startVelY;
 	isActive = true;
+	isDocked = true;
 }
 
 bool Ball::step(float dx, float dy, std::vector<Block>& blocks)
@@ -93,16 +134,6 @@ bool Ball::step(float dx, float dy, std::vector<Block>& blocks)
 			block.collide();
 			return false;
 		}
-	}
-	if (x + dx < 0.0f || x + dx >= SCREEN_WIDTH || y + dy < 0.0f)
-	{
-		return false;
-	}
-	else if (y + dy >= SCREEN_HEIGHT)
-	{
-		isActive = false;
-		reset();
-		return false;
 	}
 	return true;
 }
