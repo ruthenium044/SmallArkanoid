@@ -25,6 +25,7 @@ namespace engine
 	bool collision(const Line& line, const Point& point);
 
 	void render();
+	void drawBg();
 	void drawRect(SDL_FRect rect);
 	void drawLine(Line line);
 	void drawCircle(Circle circle);

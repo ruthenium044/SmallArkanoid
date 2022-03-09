@@ -41,6 +41,5 @@ void Player::update(float dt, float offset)
 	float h = src.h * scale;
 	mid = x + w / 2;
 
-	colliderL = { x, y, mid, y };
-	colliderR = { mid, y, x + w, y };
+	collider = { x, y,x + w, y };
 }

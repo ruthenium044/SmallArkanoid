@@ -32,7 +32,7 @@ namespace engine
         float distX = circle1.x - circle2.x;
         float distY = circle1.y - circle2.y;
         float distance = sqrt((distX * distX) + (distY * distY));
-        if (distance <= circle1.r + circle2.r) 
+        if (distance <= circle1.r + circle2.r)
         {
             return true;
         }
@@ -43,7 +43,7 @@ namespace engine
     {
         float x = circle.x;
         float y = circle.y;
-        if (circle.x < square.x) 
+        if (circle.x < square.x)
         {
             x = square.x;
         }
@@ -52,7 +52,7 @@ namespace engine
             x = square.x + square.w;
         }
 
-        if (circle.y < square.y) 
+        if (circle.y < square.y)
         {
             y = square.y;
         }
@@ -65,7 +65,7 @@ namespace engine
         float distY = circle.y - y;
         float distance = sqrt((distX * distX) + (distY * distY));
 
-        if (distance <= circle.r) 
+        if (distance <= circle.r)
         {
             return true;
         }
@@ -83,8 +83,8 @@ namespace engine
         float distY = line.a.y - line.b.y;
         float length = sqrt((distX * distX) + (distY * distY));
 
-        float dot = (((circle.x - line.a.x) * (line.b.x - line.a.x)) + 
-                    ((circle.y - line.a.y) * (line.b.y - line.a.y))) / pow(length, 2);
+        float dot = (((circle.x - line.a.x) * (line.b.x - line.a.x)) +
+            ((circle.y - line.a.y) * (line.b.y - line.a.y))) / pow(length, 2);
 
         float closestX = line.a.x + (dot * (line.b.x - line.a.x));
         float closestY = line.a.y + (dot * (line.b.y - line.a.y));
@@ -98,17 +98,17 @@ namespace engine
 
         distX = closestX - circle.x;
         distY = closestY - circle.y;
-      
+
         float distance = sqrt((distX * distX) + (distY * distY));
 
-        if (distance <= circle.r) 
+        if (distance <= circle.r)
         {
             return true;
         }
         return false;
     }
 
-    bool collision(const Point& point, const Circle& circle) 
+    bool collision(const Point& point, const Circle& circle)
     {
         float distX = point.x - circle.x;
         float distY = point.y - circle.y;
@@ -125,31 +125,48 @@ namespace engine
         float dist2 = sqrt(pow(point.x - line.b.x, 2) + pow(point.y - line.b.y, 2));
         float lineLength = sqrt(pow(line.a.x - line.b.x, 2) + pow(line.a.y - line.b.y, 2));
 
-        if (dist1 + dist2 >= lineLength && dist1 + dist2 <= lineLength) 
+        if (dist1 + dist2 >= lineLength && dist1 + dist2 <= lineLength)
         {
             return true;
         }
         return false;
     }
 
+    SDL_Color black{ 129, 151, 150, 255 };
+    SDL_Color blue{ 164, 221, 216, 255 };
+    SDL_Color yellow{ 232, 193, 112, 255 };
+
     void render()
     {
         SDL_RenderClear(renderer);
-        SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255);
+        drawBg();
+    }
+
+    void drawBg()
+    {
+        SDL_SetRenderDrawColor(renderer, black.r, black.g, black.b, black.a);
+        SDL_FRect rect{ 0,0, SCREEN_WIDTH, SCREEN_HEIGHT};
+        SDL_RenderFillRectF(renderer, &rect);
+
+        //SDL_SetRenderDrawColor(renderer, blue.r, blue.g, blue.b, blue.a);
+        //SDL_FRect rect1{ 0,0, SCREEN_WIDTH, SCREEN_HEIGHT / 4 };
+        //SDL_RenderFillRectF(renderer, &rect1);
+        //
+        //SDL_SetRenderDrawColor(renderer, yellow.r, yellow.g, yellow.b, yellow.a);
+        //SDL_FRect rect2{ 0, SCREEN_HEIGHT / 4, SCREEN_WIDTH, SCREEN_HEIGHT / 4 };
+        //SDL_RenderFillRectF(renderer, &rect2);
     }
 
     void drawRect(SDL_FRect rect)
     {
         SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
         SDL_RenderDrawRectF(renderer, &rect);
-        SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255);
     }
 
     void drawLine(Line line)
     {
-        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+        SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
         SDL_RenderDrawLineF(renderer, line.a.x, line.a.y, line.b.x, line.b.y);
-        SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255);
     }
 
     void drawCircle(Circle circle)

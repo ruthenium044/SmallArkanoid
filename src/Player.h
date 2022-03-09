@@ -14,10 +14,9 @@ public:
 	void collide();
 	void update(float dt, float offset);
 
-	Line colliderL{ 0, 0, 0, 0 };
-	Line colliderR{ 0, 0, 0, 0 };
-
+	Line collider{ 0, 0, 0, 0 };
 	float mid = 0;
+
 private:
 	Sprite sprite{ {0, 0, 0, 0} };
 	SDL_Rect src{ 0, 0, 0, 0 };

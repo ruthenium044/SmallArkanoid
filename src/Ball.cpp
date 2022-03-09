@@ -30,32 +30,34 @@ void Ball::draw()
 	}
 	SDL_FRect dst{ x - r * 2, y - r * 2, r * scale, r * scale };
 	sprite.render(dst);
+
+	//Point mid = { player.mid, player.collider.a.y};
+	//Point ball{ x - mid.x, y - mid.y };
+	//float len = sqrt(ball.x * ball.x + ball.y * ball.y);
+	//Point dir{ ball.x / len,  ball.y / len };
+	//Line normalizedDir{(dir.x * 100.0f) + mid.x, (dir.y * 100.0f) + mid.y, mid.x, mid.y };
+	//engine::drawLine(normalizedDir);
 }
 
-void Ball::collide(float dt, bool isLeft, Line collider)
+void Ball::collide(float dt, Point mid)
 {
 	if (!isActive || isDocked)
 	{
 		return;
 	}
 
-	velY = -velY;
-	
-	float playerX = collider.a.x;
-	float length = collider.b.x;
-	float hitPoint = x;
-	float proportion = (x - collider.a.x) * 10;
-	std::cout << proportion << std::endl;
-
-	if (isLeft)
-	{
-		velX = -proportion;
-	}
-	else
-	{
-		velX = proportion;
-	}
+	setNewDirection(mid);
 	y = startY;
+}
+
+void Ball::setNewDirection(Point& mid)
+{
+	Point ball{ x - mid.x, y - mid.y + 50 };
+	float len = sqrt(ball.x * ball.x + ball.y * ball.y);
+	Point dir{ ball.x / len,  ball.y / len };
+
+	velX = speed * dir.x;
+	velY = speed * -dir.y;
 }
 
 void Ball::update(float dt, std::vector<Block>& blocks, int playerX, float offset)
@@ -95,6 +97,7 @@ void Ball::checkCollisions(float dx, std::vector<Block>& blocks, float offset, f
 	}
 	if (!step(0.0f, dy, blocks) || y + dy < r + offset)
 	{
+		velX = -velX;
 		velY = -velY;
 	}
 }

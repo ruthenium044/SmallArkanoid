@@ -79,14 +79,9 @@ int main()
 			}
 		}*/
 
-		if (engine::collision(player.colliderL, ball.collider))
+		if (engine::collision(player.collider, ball.collider))
 		{
-			ball.collide(deltaTime, true, player.colliderL);
-			player.collide();
-		}
-		else if (engine::collision(player.colliderR, ball.collider))
-		{
-			ball.collide(deltaTime, false, player.colliderR);
+			ball.collide(deltaTime, { player.mid, player.collider.a.y });
 			player.collide();
 		}
 	
@@ -98,17 +93,15 @@ int main()
 		ball.draw();
 
 		//colliders
-		engine::drawLine(player.colliderL);
-		engine::drawLine(player.colliderR);
-
-		engine::drawCircle(ball.collider);
-		for (auto& block : level.blocks)
-		{
-			if (block.isActive)
-			{
-				engine::drawRect(block.collider);
-			}
-		}
+		//engine::drawLine(player.collider);
+		//engine::drawCircle(ball.collider);
+		//for (auto& block : level.blocks)
+		//{
+		//	if (block.isActive)
+		//	{
+		//		engine::drawRect(block.collider);
+		//	}
+		//}
 		engine::present();
 	}
 	
