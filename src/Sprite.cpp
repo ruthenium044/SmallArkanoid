@@ -14,3 +14,8 @@ void Sprite::render(SDL_FRect dst)
 {
 	engine::drawTexture(src, dst);
 }
+
+void Sprite::updateSrc(SDL_Rect src)
+{
+	this->src = src;
+}

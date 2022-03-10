@@ -21,6 +21,7 @@ private:
 	float scale = 0;
 
 	int hp = 0;
+	int startHp = 0;
 
 	Sprite sprite{ {0, 0, 0, 0} };
 };

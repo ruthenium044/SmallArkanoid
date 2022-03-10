@@ -92,8 +92,8 @@
   <ItemGroup>
     <ClCompile Include="src\Ball.cpp" />
     <ClCompile Include="src\Block.cpp" />
+    <ClCompile Include="src\Collision.cpp" />
     <ClCompile Include="src\Engine.cpp" />
-    <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Level.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Player.cpp" />
@@ -102,10 +102,10 @@
   <ItemGroup>
     <ClInclude Include="src\Ball.h" />
     <ClInclude Include="src\Block.h" />
+    <ClInclude Include="src\Collision.h" />
     <ClInclude Include="src\Shapes.h" />
     <ClInclude Include="src\Coords.h" />
     <ClInclude Include="src\Engine.h" />
-    <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\Level.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Sprite.h" />

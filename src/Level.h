@@ -11,13 +11,15 @@ public:
 	~Level();
 
 	void draw();
+	int getKilled();
+
+	int killCount = 0;
 
 	int gridX = 10;
 	int gridY = 10;
 	std::vector<Block> blocks;
 
 private:
-
 	std::vector<int> level = {
 		0, 1, 1, 1, 1, 1, 1, 1, 1, 0,
 		1, 1, 1, 1, 1, 1, 1, 1, 1, 1,

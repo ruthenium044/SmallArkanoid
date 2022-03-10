@@ -1,12 +1,12 @@
-//#include "Engine.h"
 #include <SDL/SDL.h>
 #include "Engine.h"
-#include "Sprite.h"
+#include "Collision.h"
 #include "Block.h"
 #include "Player.h"
 #include "Level.h"
 #include "Ball.h"
 #include <iostream>
+#include <vector>
 
 int main()
 {
@@ -15,13 +15,16 @@ int main()
 
 	SDL_Rect blockSrc{ 0, 0, 16, 8 };
 	float scale = 4;
-	float marginX = 10;
-	float marginY = 50;
-	float screenY = SCREEN_WIDTH - marginX + marginY;
+	float marginX = 32;
+	float marginY = 69 - 5;
+	float screenY = SCREEN_HEIGHT - marginY;
 
 	Level level{ blockSrc, scale, marginX, marginY };
 	Player player{ {0, 24, blockSrc.w, blockSrc.h / 2}, scale, screenY };
-	Ball ball{ {0, 32, 5, 5}, scale, screenY - blockSrc.h / 2 * scale + 2 };
+
+	Ball temp{ {0, 32, 5, 5}, scale, screenY - blockSrc.h / 2 * scale + 2 };
+	std::vector<Ball> balls;
+	balls.push_back(temp);
 
 	bool running = true;
 	Uint64 prevTicks = SDL_GetPerformanceCounter();
@@ -61,9 +64,21 @@ int main()
 			}
 		}
 
+		std::cout << level.killCount << std::endl;
+		if (level.getKilled() == 10)
+		{
+			
+			Ball temp{ {0, 32, 5, 5}, scale, screenY - blockSrc.h / 2 * scale + 2 };
+			balls.push_back(temp);
+		}
+
 		//update
 		player.update(deltaTime, marginX);
-		ball.update(deltaTime, level.blocks, player.mid, marginX);
+
+		for (auto& ball: balls)
+		{
+			ball.update(deltaTime, level.blocks, player.mid, marginX);
+		}
 
 		//collision
 		/*for (auto& block : level.blocks)
@@ -79,10 +94,13 @@ int main()
 			}
 		}*/
 
-		if (engine::collision(player.collider, ball.collider))
+		for (auto& ball : balls)
 		{
-			ball.collide(deltaTime, { player.mid, player.collider.a.y });
-			player.collide();
+			if (collision::intersect(player.collider, ball.collider))
+			{
+				ball.collide(deltaTime, { player.mid, player.collider.a.y });
+				player.collide();
+			}
 		}
 	
 		//render
@@ -90,7 +108,10 @@ int main()
 	
 		level.draw();
 		player.draw();
-		ball.draw();
+		for (auto& ball : balls)
+		{
+			ball.draw();
+		}
 
 		//colliders
 		//engine::drawLine(player.collider);
@@ -103,6 +124,7 @@ int main()
 		//	}
 		//}
 		engine::present();
+		SDL_Delay(16);
 	}
 	
 	engine::close();

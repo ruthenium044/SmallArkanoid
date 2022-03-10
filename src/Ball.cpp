@@ -1,5 +1,6 @@
 #include "Ball.h"
 #include "Engine.h"
+#include "Collision.h"
 #include "Block.h"
 #include <iostream>
 
@@ -82,9 +83,6 @@ void Ball::update(float dt, std::vector<Block>& blocks, int playerX, float offse
 
 	checkLose(dy);
 	checkCollisions(dx, blocks, offset, dy);
-
-	x += dx;
-	y += dy;
 	collider = { x, y, r * scale / 2.0f };
 }
 
@@ -132,11 +130,13 @@ bool Ball::step(float dx, float dy, std::vector<Block>& blocks)
 		{
 			continue;
 		}
-		if (engine::collision(block.collider, nextCollider))
+		if (collision::intersect(block.collider, nextCollider))
 		{
 			block.collide();
 			return false;
 		}
 	}
+	x += dx;
+	y += dy;
 	return true;
 }

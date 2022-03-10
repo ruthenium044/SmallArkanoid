@@ -7,8 +7,8 @@ public:
 	Sprite(SDL_Rect src);
 	~Sprite();
 	void render(SDL_FRect dst);
+	void updateSrc(SDL_Rect src);
 
-private:
 	SDL_Rect src;
 };
 
