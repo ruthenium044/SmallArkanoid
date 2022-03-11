@@ -3,7 +3,7 @@
 #include "Shapes.h"
 #include <SDL/SDL.h>
 
-const int SCREEN_WIDTH = 69 * 10;
+const int SCREEN_WIDTH = 69 * 10 + 14;
 const int SCREEN_HEIGHT = 420 * 2;
 
 struct SDL_Texture;
@@ -21,7 +21,7 @@ namespace engine
 	void drawLine(Line line);
 	void drawCircle(Circle circle);
 	void drawTexture(SDL_Rect src, SDL_FRect dst);
-	void loadTexture(const char* path);
+	void loadTextures(const char* path, const char* bgPath);
 
 	void present();
 	void close();

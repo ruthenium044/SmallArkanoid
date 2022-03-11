@@ -7,6 +7,7 @@ namespace engine
     static SDL_Window* window;
     static SDL_Renderer* renderer;
     static SDL_Texture* mainTexture;
+    static SDL_Texture* backgroundTexture;
     static bool keys[SDL_NUM_SCANCODES] = { false };
 
     SDL_Color black{ 129, 151, 150, 255 };
@@ -33,14 +34,17 @@ namespace engine
     void render()
     {
         SDL_RenderClear(renderer);
-        drawBg();
+        
     }
 
     void drawBg()
     {
-        SDL_SetRenderDrawColor(renderer, black.r, black.g, black.b, black.a);
-        SDL_FRect rect{ 0,0, SCREEN_WIDTH, SCREEN_HEIGHT};
-        SDL_RenderFillRectF(renderer, &rect);
+        //SDL_SetRenderDrawColor(renderer, black.r, black.g, black.b, black.a);
+
+        SDL_Rect src{ 0, 0, 176, 210};
+        SDL_FRect dst{ 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
+        SDL_RenderCopyF(renderer, backgroundTexture, &src, &dst);
+
 
         //SDL_SetRenderDrawColor(renderer, blue.r, blue.g, blue.b, blue.a);
         //SDL_FRect rect1{ 0,0, SCREEN_WIDTH, SCREEN_HEIGHT / 4 };
@@ -94,9 +98,10 @@ namespace engine
         SDL_RenderCopyF(renderer, mainTexture, &src, &dst);
     }
 
-    void loadTexture(const char* path)
+    void loadTextures(const char* path, const char* bgPath)
     {
         mainTexture = IMG_LoadTexture(renderer, path);
+        backgroundTexture = IMG_LoadTexture(renderer, bgPath);
     }
 
     void present()

@@ -19,8 +19,8 @@ public:
 	void setNewDirection(Point& mid);
 	void update(float dt, std::vector<Block>& blocks, int playerX, float offset);
 	void checkCollisions(float dx, std::vector<Block>& blocks, float offset, float dy);
-	void checkLose(float dy);
-	void reset();
+	void checkLose(float dy, int playerX);
+	void reset(int playerX);
 	bool step(float dx, float dy, std::vector<Block>& blocks);
 
 	Circle collider{ 0, 0, 0 };

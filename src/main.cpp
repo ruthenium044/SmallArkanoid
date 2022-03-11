@@ -11,16 +11,16 @@
 int main()
 {
 	engine::init();
-	engine::loadTexture("Warship.png");
+	engine::loadTextures("Warship.png", "BG.png");
 
-	SDL_Rect blockSrc{ 0, 0, 16, 8 };
+	SDL_Rect blockSrc{ 0, 0, 16, 9 };
 	float scale = 4;
-	float marginX = 32;
-	float marginY = 69 - 5;
+	float marginX = 48;
+	float marginY = 48;
 	float screenY = SCREEN_HEIGHT - marginY;
 
-	Level level{ blockSrc, scale, marginX, marginY };
-	Player player{ {0, 24, blockSrc.w, blockSrc.h / 2}, scale, screenY };
+	Level level{ blockSrc, scale, marginX + 4 * scale, marginY + 4 * scale };
+	Player player{ {0, 28, blockSrc.w, blockSrc.h / 2}, scale, screenY };
 
 	Ball temp{ {0, 32, 5, 5}, scale, screenY - blockSrc.h / 2 * scale + 2 };
 	std::vector<Ball> balls;
@@ -28,6 +28,8 @@ int main()
 
 	bool running = true;
 	Uint64 prevTicks = SDL_GetPerformanceCounter();
+
+	int savedKills = 0;
 
 	while (running)
 	{
@@ -64,10 +66,10 @@ int main()
 			}
 		}
 
-		std::cout << level.killCount << std::endl;
-		if (level.getKilled() == 10)
+		int killed = level.getKilled();
+		if (killed % 10 == 0 && savedKills != killed)
 		{
-			
+			savedKills = killed;
 			Ball temp{ {0, 32, 5, 5}, scale, screenY - blockSrc.h / 2 * scale + 2 };
 			balls.push_back(temp);
 		}
@@ -105,7 +107,7 @@ int main()
 	
 		//render
 		engine::render();
-	
+		engine::drawBg();
 		level.draw();
 		player.draw();
 		for (auto& ball : balls)
