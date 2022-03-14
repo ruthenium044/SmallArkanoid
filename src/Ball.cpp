@@ -1,8 +1,6 @@
 #include "Ball.h"
 #include "Engine.h"
 #include "Collision.h"
-#include "Block.h"
-#include <iostream>
 
 Ball::Ball()
 {
@@ -31,6 +29,7 @@ void Ball::draw()
 	}
 	SDL_FRect dst{ x - r * 2, y - r * 2, r * scale, r * scale };
 	sprite.render(dst);
+	//engine::drawCircle(collider);
 }
 
 void Ball::collide(float dt, Point mid)
@@ -58,10 +57,7 @@ void Ball::update(float dt, std::vector<Block>& blocks, int playerX, float offse
 	if (isDocked)
 	{
 		x = playerX;
-	}
-	if (engine::checkInput(SDL_SCANCODE_SPACE))
-	{
-		isDocked = false;
+		y = startY;
 	}
 	if (!isActive || isDocked)
 	{
@@ -73,6 +69,11 @@ void Ball::update(float dt, std::vector<Block>& blocks, int playerX, float offse
 	checkLose(dy, playerX);
 	checkCollisions(dx, blocks, offset, dy);
 	collider = { x, y, r * scale / 2.0f };
+}
+
+void Ball::undock()
+{
+	isDocked = false;
 }
 
 void Ball::checkCollisions(float dx, std::vector<Block>& blocks, float offset, float dy)

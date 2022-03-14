@@ -1,7 +1,7 @@
 #include "Level.h"
+#include "Player.h"
 
 Level::Level() 
-	
 {
 }
 
@@ -50,6 +50,22 @@ void Level::draw()
 		{
 			blocks[y * gridX + x].draw();
 		}
+	}
+}
+
+void Level::update(bool& running, int& savedKills, Player& player)
+{
+	int killed = getKilled();
+	if (killed == blocks.size())
+	{
+		running = false;
+	}
+	else if (killed % 10 == 0 && savedKills != killed)
+	{
+		savedKills = killed;
+
+		//how to get rid of this
+		player.getAmmo();
 	}
 }
 

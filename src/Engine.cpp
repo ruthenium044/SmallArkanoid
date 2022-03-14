@@ -1,5 +1,4 @@
 #include "Engine.h"
-#include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
 
 namespace engine
@@ -34,25 +33,13 @@ namespace engine
     void render()
     {
         SDL_RenderClear(renderer);
-        
     }
 
     void drawBg()
     {
-        //SDL_SetRenderDrawColor(renderer, black.r, black.g, black.b, black.a);
-
         SDL_Rect src{ 0, 0, 176, 210};
         SDL_FRect dst{ 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
         SDL_RenderCopyF(renderer, backgroundTexture, &src, &dst);
-
-
-        //SDL_SetRenderDrawColor(renderer, blue.r, blue.g, blue.b, blue.a);
-        //SDL_FRect rect1{ 0,0, SCREEN_WIDTH, SCREEN_HEIGHT / 4 };
-        //SDL_RenderFillRectF(renderer, &rect1);
-        //
-        //SDL_SetRenderDrawColor(renderer, yellow.r, yellow.g, yellow.b, yellow.a);
-        //SDL_FRect rect2{ 0, SCREEN_HEIGHT / 4, SCREEN_WIDTH, SCREEN_HEIGHT / 4 };
-        //SDL_RenderFillRectF(renderer, &rect2);
     }
 
     void drawRect(SDL_FRect rect)

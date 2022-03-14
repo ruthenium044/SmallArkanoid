@@ -1,12 +1,9 @@
 #include <SDL/SDL.h>
 #include "Engine.h"
-#include "Collision.h"
-#include "Block.h"
 #include "Player.h"
 #include "Level.h"
 #include "Ball.h"
-#include <iostream>
-#include <vector>
+#include "main.h"
 
 int main()
 {
@@ -22,13 +19,8 @@ int main()
 	Level level{ blockSrc, scale, marginX + 4 * scale, marginY + 4 * scale };
 	Player player{ {0, 28, blockSrc.w, blockSrc.h / 2}, scale, screenY };
 
-	Ball temp{ {0, 32, 5, 5}, scale, screenY - blockSrc.h / 2 * scale + 2 };
-	std::vector<Ball> balls;
-	balls.push_back(temp);
-
-	bool running = true;
 	Uint64 prevTicks = SDL_GetPerformanceCounter();
-
+	bool running = true;
 	int savedKills = 0;
 
 	while (running)
@@ -66,58 +58,18 @@ int main()
 			}
 		}
 
-		int killed = level.getKilled();
-		if (killed % 10 == 0 && savedKills != killed)
-		{
-			savedKills = killed;
-			Ball temp{ {0, 32, 5, 5}, scale, screenY - blockSrc.h / 2 * scale + 2 };
-			balls.push_back(temp);
-		}
-
 		//update
-		player.update(deltaTime, marginX);
-
-		for (auto& ball: balls)
-		{
-			ball.update(deltaTime, level.blocks, player.mid, marginX);
-		}
-
-		//collision
-		/*for (auto& block : level.blocks)
-		{
-			if (engine::collision(block.collider, ball.collider))
-			{
-				if (block.isActive)
-				{
-					block.collide();
-					ball.collide(deltaTime);
-				}
-				
-			}
-		}*/
-
-		for (auto& ball : balls)
-		{
-			if (collision::intersect(player.collider, ball.collider))
-			{
-				ball.collide(deltaTime, { player.mid, player.collider.a.y });
-				player.collide();
-			}
-		}
+		player.update(deltaTime, marginX, level);
+		level.update(running, savedKills, player);
 	
 		//render
 		engine::render();
 		engine::drawBg();
 		level.draw();
 		player.draw();
-		for (auto& ball : balls)
-		{
-			ball.draw();
-		}
 
 		//colliders
 		//engine::drawLine(player.collider);
-		//engine::drawCircle(ball.collider);
 		//for (auto& block : level.blocks)
 		//{
 		//	if (block.isActive)
@@ -125,11 +77,12 @@ int main()
 		//		engine::drawRect(block.collider);
 		//	}
 		//}
+
 		engine::present();
 		SDL_Delay(16);
 	}
-	
 	engine::close();
 
 	return 0;
 }
+
