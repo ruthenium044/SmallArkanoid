@@ -66,7 +66,6 @@ void Ball::update(float dt, std::vector<Block>& blocks, int playerX, float offse
 	float dx = velX * dt;
 	float dy = velY * dt;
 
-	checkLose(dy, playerX);
 	checkCollisions(dx, blocks, offset, dy);
 	collider = { x, y, r * scale / 2.0f };
 }
@@ -90,25 +89,17 @@ void Ball::checkCollisions(float dx, std::vector<Block>& blocks, float offset, f
 	}
 }
 
-void Ball::checkLose(float dy, int playerX)
-{
-	if (y + dy >= SCREEN_HEIGHT + 2 * r)
-	{
-		isActive = false;
-		reset(playerX);
-	}
-}
 
 void Ball::reset(int playerX)
 {
 	x = playerX;
 	y = startY;
 
-	isActive = true;
-	isDocked = true;
-
 	velX = startVelX;
 	velY = -startVelY;
+
+	isDocked = true;
+	isActive = true;
 }
 
 bool Ball::step(float dx, float dy, std::vector<Block>& blocks)

@@ -18,8 +18,12 @@ public:
 	void update(float dt, std::vector<Block>& blocks, int playerX, float offset);
 	void undock();
 
+	bool isActive = true;
 	bool isDocked = true;
+	void reset(int playerX);
+
 	Circle collider{ 0, 0, 0 };
+
 private:
 	float x = 0.0f;
 	float y = 0.0f;
@@ -31,7 +35,6 @@ private:
 	float startVelX = 0.0f;
 	float startVelY = -speed;
 
-	bool isActive = false;
 	Sprite sprite{ {0, 0, 0, 0} };
 
 	float startX = 0;
@@ -40,9 +43,7 @@ private:
 
 	void setNewDirection(Point& mid);
 	void checkCollisions(float dx, std::vector<Block>& blocks, float offset, float dy);
-	void checkLose(float dy, int playerX);
 
-	void reset(int playerX);
 	bool step(float dx, float dy, std::vector<Block>& blocks);
 };
 #endif // !INCLUDED_BALL_H 

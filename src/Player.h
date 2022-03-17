@@ -17,7 +17,6 @@ public:
 
 	void draw();
 	void update(float dt, float offset, Level& level);
-	void getAmmo();
 
 	Line collider{ 0, 0, 0, 0 };
 	float mid = 0;
@@ -30,15 +29,5 @@ private:
 	float x = 0;
 	float y = 0;
 	int speed = 400;
-
-	std::vector<Ball> balls;
-	bool wasPressed = false;
-	float shootRate = 0.2f;
-	float shootTimer = shootRate;
-
-	void collideBalls(float dt);
-	void updateBalls(float dt, Level& level, float offset);
-	void tryMove(float dt);
-	void tryShoot(float dt);
 };
 #endif // !INCLUDED_PLAYER_H 

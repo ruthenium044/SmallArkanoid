@@ -14,6 +14,7 @@ public:
 
 	void draw();
 	void update(bool& running, int& savedKills, Player& player);
+	int getKilled();
 
 	std::vector<Block> blocks;
 private:
@@ -21,7 +22,6 @@ private:
 	int gridX = 9;
 	int gridY = 9;
 
-	int getKilled();
 
 	std::vector<int> level = {
 		0, 1, 1, 1, 1, 1, 1, 1, 0,

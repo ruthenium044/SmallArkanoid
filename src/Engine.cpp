@@ -1,13 +1,20 @@
 #include "Engine.h"
 #include <SDL/SDL_image.h>
+#include <SDL/SDL_ttf.h>
 
 namespace engine
 {
     static SDL_Window* window;
     static SDL_Renderer* renderer;
+
     static SDL_Texture* mainTexture;
     static SDL_Texture* backgroundTexture;
-    static bool keys[SDL_NUM_SCANCODES] = { false };
+    static SDL_Texture* textTexture;
+    static TTF_Font* font;
+    float w, h;
+
+    int frameNumber = 0;
+    static KeyState keys[SDL_NUM_SCANCODES];
 
     SDL_Color black{ 129, 151, 150, 255 };
     SDL_Color blue{ 164, 221, 216, 255 };
@@ -16,18 +23,34 @@ namespace engine
     void init()
     {
         SDL_Init(SDL_INIT_EVERYTHING);
+        TTF_Init();
         window = SDL_CreateWindow("Russky voyenny korabl, idi nahuy", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
         renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     }
 
-    void registerInput(SDL_Scancode key, bool state)
+    void increaseFrame()
     {
-        keys[key] = state;
+        frameNumber++;
     }
 
-    bool checkInput(SDL_Scancode key)
+    void registerInput(SDL_Scancode key, bool state)
     {
-        return keys[key];
+        keys[key].state = state;
+        keys[key].changeFrame = frameNumber;
+    }
+
+    bool getKeyDown(SDL_Scancode key)
+    {
+        return keys[key].state;
+    }
+
+    bool getKeyPressed(SDL_Scancode key)
+    {
+        return keys[key].state && keys[key].changeFrame == frameNumber;
+    }
+    bool getKeyReleased(SDL_Scancode key)
+    {
+        return !keys[key].state && keys[key].changeFrame == frameNumber;
     }
 
     void render()
@@ -85,11 +108,30 @@ namespace engine
         SDL_RenderCopyF(renderer, mainTexture, &src, &dst);
     }
 
+    void drawText(float x, float y)
+    {
+        SDL_FRect dst{ x - w / 2, y - h / 2, w, h };
+        SDL_RenderCopyF(renderer, textTexture, NULL, &dst);
+    }
+
+    void setText(const char* text)
+    {
+        SDL_Surface* surface = TTF_RenderText_Blended(font, text, yellow);
+        w = surface->w;
+        h = surface->h;
+        textTexture = SDL_CreateTextureFromSurface(renderer, surface);
+    }
+
     void loadTextures(const char* path, const char* bgPath)
     {
         mainTexture = IMG_LoadTexture(renderer, path);
         backgroundTexture = IMG_LoadTexture(renderer, bgPath);
     }
+
+    void loadFont(const char* path, int size)
+    {
+        font = TTF_OpenFont(path, size);
+     }
 
     void present()
     {

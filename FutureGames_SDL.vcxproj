@@ -91,6 +91,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Ball.cpp" />
+    <ClCompile Include="src\Balls.cpp" />
     <ClCompile Include="src\Block.cpp" />
     <ClCompile Include="src\Collision.cpp" />
     <ClCompile Include="src\Engine.cpp" />
@@ -101,9 +102,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Ball.h" />
+    <ClInclude Include="src\Balls.h" />
     <ClInclude Include="src\Block.h" />
     <ClInclude Include="src\Collision.h" />
-    <ClInclude Include="src\main.h" />
     <ClInclude Include="src\Shapes.h" />
     <ClInclude Include="src\Coords.h" />
     <ClInclude Include="src\Engine.h" />
