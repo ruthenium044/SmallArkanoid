@@ -20,21 +20,21 @@ int main()
 	engine::setText("Press space");
 
 	Level level{ blockSrc, scale, margin + 4 * scale, margin + 4 * scale };
-	Player player{ {0, 28, blockSrc.w, blockSrc.h / 2}, scale, screenY };
-	Balls balls{ {0, 32, 5, 5}, scale, screenY };
+	Player player{ {32, 9, blockSrc.w, blockSrc.h / 2}, scale, screenY };
+	Balls balls{ {32, 13, 5, 5}, scale, screenY };
 
 	Uint64 prevTicks = SDL_GetPerformanceCounter();
 	bool running = true;
 	int savedKills = 0;
 
-	enum State
+	enum class State
 	{
 		START,
 		GAME,
 		LOSE,
 		WIN
 	};
-	State cuttentState = START;
+	State cuttentState = State::START;
 
 	while (running)
 	{
@@ -77,12 +77,12 @@ int main()
 		engine::render();
 		engine::drawBg();
 
-		if (cuttentState == GAME)
+		if (cuttentState == State::GAME)
 		{
-			if (balls.deathCounter >= 3)
+			if (balls.deathCounter >= balls.health)
 			{
 				engine::setText("You lose bye");
-				cuttentState = LOSE;
+				cuttentState = State::LOSE;
 			}
 			player.update(deltaTime, margin, level);
 			balls.update(deltaTime, level, player, margin);
@@ -92,14 +92,13 @@ int main()
 			if (killed == level.blocks.size())
 			{
 				engine::setText("You win bye");
-				cuttentState = WIN;
+				cuttentState = State::WIN;
 			}
 			else if (killed % 10 == 0 && savedKills != killed)
 			{
 				savedKills = killed;
 				balls.addBall();
 			}
-		
 			player.draw();
 			balls.draw();
 			level.draw();
@@ -108,9 +107,9 @@ int main()
 		{
 			if (engine::getKeyPressed(SDL_SCANCODE_SPACE))
 			{
-				if (cuttentState == START)
+				if (cuttentState == State::START)
 				{
-					cuttentState = GAME;
+					cuttentState = State::GAME;
 				}
 				else
 				{

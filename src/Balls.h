@@ -16,6 +16,7 @@ public:
 	void draw();
 
 	int deathCounter = 0;
+	int health = 3;
 	std::vector<Ball> balls;
 
 private:

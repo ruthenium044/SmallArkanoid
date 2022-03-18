@@ -4,8 +4,6 @@
 
 Balls::Balls()
 {
-	
-
 }
 
 Balls::Balls(SDL_Rect src, float scale, float y)
@@ -66,7 +64,10 @@ void Balls::checkLose(Ball& ball, int i, int x)
 		else
 		{
 			deathCounter++;
-			ball.reset(x);
+			if (deathCounter < health)
+			{
+				ball.reset(x);
+			}
 		}
 	}
 }

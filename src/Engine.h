@@ -21,7 +21,7 @@ namespace engine
 
 	void increaseFrame();
 	void registerInput(SDL_Scancode key, bool state);
-	bool getKeyDown(SDL_Scancode key); 
+	bool getKeyDown(SDL_Scancode key);
 	bool getKeyPressed(SDL_Scancode key);
 	bool getKeyReleased(SDL_Scancode key);
 
